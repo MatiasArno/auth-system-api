@@ -7,7 +7,7 @@ class User extends Model {
 		const { email, username } = userData;
 
 		try {
-			const [user, isUserCreated] = await User.findOrCreate({
+			const [user, isUserCreated] = await this.findOrCreate({
 				where: { username },
 				defaults: {
 					username,
@@ -21,6 +21,10 @@ class User extends Model {
 
 			throw new AppError(type, message, 400);
 		}
+	}
+
+	static async findByUsername(username: string) {
+		return this.findOne({ where: { username } });
 	}
 }
 

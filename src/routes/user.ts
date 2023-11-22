@@ -6,12 +6,8 @@ import UserController from '../controllers/user';
 
 const userRouter = Router();
 
-userRouter.put('/auth', tryCatch(UserController.createNew));
-
-// userRouter.get('/', );
-// userRouter.put('/', );
-// userRouter.patch('/', );
-// userRouter.delete('/', );
+userRouter.post('/auth', tryCatch(UserController.createNew));
+userRouter.post('/auth/token', tryCatch(UserController.login));
 
 userRouter.all('/', wrongMethodHandler);
 userRouter.all('/*', wrongURIHandler);

@@ -1,7 +1,7 @@
 import sequelize from '.';
 
 const syncDB = async () => {
-	await sequelize.sync({ alter: true });
+	await sequelize.sync({ force: true });
 	return { message: 'All models were synchronized successfully.' };
 };
 
