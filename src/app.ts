@@ -11,7 +11,6 @@ app.use(json());
 
 app.use('/v1/api', mainRouter);
 
-// Middleware que se ejecuta al arrojar un error.
 app.use(errorHandlder);
 
 export default app;

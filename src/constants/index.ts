@@ -1,9 +1,11 @@
 const ENVIRONMENT = process.env.ENVIRONMENT;
 
-const PORT = process.env.PORT || 45009;
+const PORT = Number(process.env.PORT) || 45009;
 
-const POSTGRES_URL = process.env.POSTGRESQL_URL || '';
+const POSTGRES_URL = process.env.POSTGRES_URL || '';
+
+const SECRET_KEY = process.env.SECRET_KEY || '';
 
 const isDevelopmentEnvironment = ENVIRONMENT === 'development';
 
-export { PORT, ENVIRONMENT, POSTGRES_URL, isDevelopmentEnvironment };
+export { PORT, ENVIRONMENT, POSTGRES_URL, SECRET_KEY, isDevelopmentEnvironment };

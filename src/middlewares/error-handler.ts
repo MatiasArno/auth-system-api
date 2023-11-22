@@ -13,6 +13,8 @@ const errorHandlder = (
 			.json({ type: error.errorType, message: error.message });
 	}
 
+	console.log(error);
+
 	return res
 		.status(500)
 		.json({ message: 'Something went wrong with the server' });

@@ -3,11 +3,11 @@ import AppError from '../utils/app-error';
 const { STRING, INTEGER } = DataTypes;
 
 class User extends Model {
-	static async createNew(userData: any) {
+	static async register(userData: any) {
 		const { email, username } = userData;
 
 		try {
-			const [user, isUserCreated] = await this.findOrCreate({
+			const [user, wasUserCreated] = await this.findOrCreate({
 				where: { username },
 				defaults: {
 					username,
@@ -15,16 +15,19 @@ class User extends Model {
 				},
 			});
 
-			return { user, isUserCreated };
+			return { user, wasUserCreated };
 		} catch (error) {
 			const { type, message } = (error as any).errors[0];
-
 			throw new AppError(type, message, 400);
 		}
 	}
 
 	static async findByUsername(username: string) {
 		return this.findOne({ where: { username } });
+	}
+	
+	static async findByPrimaryKey(pk: string) {
+		return this.findByPk(pk);
 	}
 }
 

@@ -20,6 +20,9 @@ const User = z.object({
 		.min(8),
 });
 
-const validateUser = (userData: any) => User.safeParse(userData);
+const validateUserData = (userData: any) => User.safeParse(userData);
+const validatePartialUserData = (userData: any) =>
+	User.partial().safeParse(userData);
 
-export default validateUser;
+export { validatePartialUserData };
+export default validateUserData;

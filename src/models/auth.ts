@@ -5,7 +5,7 @@ class Auth extends Model {
 	static async createNew(userData: any) {
 		const { userID, hashedPassword } = userData;
 
-		const [auth, isAuthCreated] = await Auth.findOrCreate({
+		const [auth, isAuthCreated] = await this.findOrCreate({
 			where: { user_id: userID },
 			defaults: {
 				password: hashedPassword,
@@ -14,6 +14,18 @@ class Auth extends Model {
 		});
 
 		return { auth, isAuthCreated };
+	}
+
+	static async searchByPrimaryKey(pk: string) {
+		return this.findByPk(pk);
+	}
+
+	static async updatePassword(userData: any) {
+		const { pk, newPassword } = userData;
+		return this.update(
+			{ password: newPassword },
+			{ where: { user_id: pk } }
+		);
 	}
 }
 
