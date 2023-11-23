@@ -1,20 +1,11 @@
 import { Request, Response } from 'express';
-import { UserData, UserCredentials } from './user.types';
-import validateUserData, { validatePartialUserData } from '../schemas/user';
-import validateUserCredentials from '../schemas/credentials';
 import User from '../models/user';
 import Auth from '../models/auth';
-import getSHA512FromString from '../utils/password-hasher';
-import { getToken } from '../utils/token-generator';
+import { getToken } from '../utils/token-manager';
 
 abstract class UserController {
 	static async register(req: Request, res: Response) {
-		const validatedData = validateUserData(req.body);
-
-		if (!validatedData.success) return res.status(400).json(validatedData);
-
-		const { email, username, password } = validatedData.data;
-		const hashedPassword = getSHA512FromString(password);
+		const { username, email, hashedPassword } = res.locals.userData;
 
 		const newUser = await User.register({ username, email });
 
@@ -25,19 +16,15 @@ abstract class UserController {
 	}
 
 	static async login(req: Request, res: Response) {
-		const validatedData = validatePartialUserData(req.body);
-		if (!validatedData.success) return res.status(400).json(validatedData);
-
-		const { username, password } = validatedData.data as UserData;
+		const { username, hashedPassword } = res.locals.userData;
 
 		const userFound = await User.findByUsername(username);
 		if (!userFound)
-			return res.status(400).json({ error: 'User is not registered' });
+			return res.status(404).json({ error: 'User is not registered' });
 
 		const userID = (userFound as any).id;
-		const userAuth = (await Auth.searchByPrimaryKey(userID)) as any;
-		const storedHashedPassword = userAuth.password;
-		const hashedPassword = getSHA512FromString(password);
+		const userAuth = await Auth.searchByPrimaryKey(userID);
+		const storedHashedPassword = (userAuth as any).password;
 
 		if (hashedPassword === storedHashedPassword) {
 			const token = getToken({ userID, username });
@@ -56,14 +43,8 @@ abstract class UserController {
 	}
 
 	static async changePassword(req: Request, res: Response) {
-		const { userID } = res.locals.userData;
-		const validatedData = validateUserCredentials(req.body);
-		if (!validatedData.success) return res.status(400).json(validatedData);
-
-		const { oldPassword, newPassword } =
-			validatedData.data as UserCredentials;
-		const oldHashedPassword = getSHA512FromString(oldPassword);
-		const hashedPassword = getSHA512FromString(newPassword);
+		const { userID, oldHashedPassword, newHashedPassword } =
+			res.locals.userData;
 
 		const oldStoredHashedPassword = (
 			(await Auth.searchByPrimaryKey(userID)) as any
@@ -72,7 +53,7 @@ abstract class UserController {
 		if (oldHashedPassword === oldStoredHashedPassword) {
 			await Auth.updatePassword({
 				pk: userID,
-				newPassword: hashedPassword,
+				newPassword: newHashedPassword,
 			});
 
 			return res

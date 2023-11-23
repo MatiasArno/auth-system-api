@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyToken } from '../utils/token-generator';
+import { verifyToken } from '../utils/token-manager';
 import AppError from '../utils/app-error';
 
 const authorizeUser = (req: Request, res: Response, next: NextFunction) => {

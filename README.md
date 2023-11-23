@@ -7,13 +7,15 @@ La aplicación va a constar de dos servicios principales:
 
 # MUST HAVE
 
--   Documentación con Postman.
+-   Documentación con Postman --> OK
 -   ERD.
--   Auth con JWT.
+-   Auth con JWT --> OK
+-   Tokens con caducidad
+-   Refresh tokens.
+-   Middleware para validar datos con zod --> OK
 -   Deploy en Render.
 -   Logs con Winston, Morgan y Logtail. Real-time dashboard.
--   Sequelize y PostgreSQL
--   ZOD
+-   Sequelize y PostgreSQL --> OK
 -   Tests con JEST
 -   Configuración de CORS
 
