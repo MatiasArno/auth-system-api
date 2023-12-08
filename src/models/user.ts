@@ -1,4 +1,4 @@
-import sequelize, { Model, DataTypes } from './database';
+import sequelize, { Model, DataTypes } from './database/connection';
 import AppError from '../utils/app-error';
 const { STRING, INTEGER } = DataTypes;
 
@@ -25,7 +25,7 @@ class User extends Model {
 	static async findByUsername(username: string) {
 		return this.findOne({ where: { username } });
 	}
-	
+
 	static async findByPrimaryKey(pk: string) {
 		return this.findByPk(pk);
 	}

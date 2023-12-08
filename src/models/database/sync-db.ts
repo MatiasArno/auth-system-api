@@ -1,4 +1,4 @@
-import sequelize from '.';
+import sequelize from './connection';
 
 const syncDB = async () => {
 	await sequelize.sync({ force: true });

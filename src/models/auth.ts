@@ -1,4 +1,4 @@
-import sequelize, { Model, DataTypes } from './database';
+import sequelize, { Model, DataTypes } from './database/connection';
 const { STRING, INTEGER } = DataTypes;
 
 class Auth extends Model {
